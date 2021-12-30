@@ -1,0 +1,84 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' && contains( join(github.event.commits.*.message), '#skip' ) == false }}
+        uses: anothrNick/github-tag-action@1.33.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: 'patch' # major.minor.patch
+          WITH_V: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with: 
+          node-version: '12.x'
+
+      - name: npm install
+        run: npm install
+
+      - name: lint
+        run: npm run eslint
+
+      - name: build
+        run: npm run build
+
+
+      - name: Deploy to Heroku
+        if: ${{ github.event_name == 'push' && contains( join(github.event.commits.*.message), '#skip' ) == false }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "emiselro-cicd"
+          heroku_email: "emil.selroos@gamil.com"
+          # healthcheck: "https://emiselro-cicd.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
+
+
+      - name: Successful Deployment!
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: commit,author,took
+          channel: '#code'
+          custom_payload: |
+            {
+              icon_emoji: ':white_check_mark:',
+              attachments: [{
+                color: 'good',
+                text: `Something deployed to https://github.com/emilselroos/FullStackOpen-cicd/ (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} \n Build took ${process.env.AS_TOOK}`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        if: ${{ success() }}
+
+      - name: Failure on Deployment!
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,took
+          icon_emoji: ':no_entry:'
+          channel: '#code'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        if: ${{ failure() }}
+          
+
+
+
