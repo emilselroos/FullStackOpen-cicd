@@ -1,3 +1,3 @@
-# Linkki sovellukseen Herokussa
+# Information
 
 - https://emiselro-cicd.herokuapp.com
