@@ -44,8 +44,8 @@ jobs:
           heroku_app_name: "emiselro-cicd"
           heroku_email: "emil.selroos@gamil.com"
           # healthcheck: "https://emiselro-cicd.herokuapp.com/health"
-          checkstring: "ok"
-          rollbackonhealthcheckfailed: true
+          # checkstring: "ok"
+          # rollbackonhealthcheckfailed: true
 
 
       - name: Successful Deployment!
