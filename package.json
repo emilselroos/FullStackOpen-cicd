@@ -1,7 +1,7 @@
 {
   "name": "mooc-2021-part03",
   "version": "1.0.0",
-  "description": "",
+  "description": "Full Stack Open CI/CD exercise 11.21",
   "main": "src/index.js",
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
