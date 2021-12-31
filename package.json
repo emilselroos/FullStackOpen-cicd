@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emilselroos/mooc-2021-part03.git"
+    "url": "git+https://github.com/emilselroos/FullStackOpen-cicd.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/emilselroos/mooc-2021-part03/issues"
+    "url": "https://github.com/emilselroos/FullStackOpen-cicd/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
