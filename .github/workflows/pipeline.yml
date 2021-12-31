@@ -6,10 +6,11 @@ on:
       - master
 
 jobs:
-  deployment_pipeline:
+
+  build:
     runs-on: ubuntu-18.04
     steps:
-
+      
       - name: Checkout
         uses: actions/checkout@v2
       
@@ -34,6 +35,14 @@ jobs:
 
       - name: build
         run: npm run build
+
+  deployment_pipeline:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Deploy to Heroku
         if: ${{ github.event_name == 'push' }}
