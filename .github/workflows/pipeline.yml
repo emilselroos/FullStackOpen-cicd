@@ -42,10 +42,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "emiselro-cicd"
           heroku_email: "emil.selroos@gmail.com"
-          # healthcheck: "https://emiselro-cicd.herokuapp.com/health"
-          # checkstring: "ok"
-          # rollbackonhealthcheckfailed: true
-
 
       - name: Successful Deployment!
         uses: 8398a7/action-slack@v3
